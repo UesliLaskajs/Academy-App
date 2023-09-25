@@ -1,6 +1,6 @@
 const mongoose =require("mongoose")
 
-mongoose.connect("mongodb://localhost:27018/team_manager",{
+mongoose.connect("mongodb://localhost:27018/academy",{
     useNewUrlParser : true,
     useUnifiedTopology: true
 })

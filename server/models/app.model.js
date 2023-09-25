@@ -17,10 +17,18 @@ const AppSchema=new mongoose.Schema({
     image:{
         type:String,
         required:[true,'Please add An img Url']
-    }
+    },
     role:{
         type:String,
-        required:[true,'Please select a role']
-        enum: ['teacher', 'Option2', 'Option3']
+        required:[true,'Please select a role'],
+        enum: ['teacher', 'student']
+    },
+    belt:{
+        type:Boolean
+    },
+    degree:{
+        type:Boolean
     }
-})
+},{timestamps:true});
+
+module.exports=mongoose.model('Academy',AppSchema)
