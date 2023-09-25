@@ -15,6 +15,7 @@ const UserIdUpdate = () => {
     });
     const { id } = useParams();
     const navigate = useNavigate();
+    const [existingTeacher,setExistingTeacher]=useState(false)
 
     useEffect(() => {
         axios
@@ -26,6 +27,19 @@ const UserIdUpdate = () => {
                 console.log("Error getting user data", err);
             });
     }, [id]);
+
+    useEffect(()=>{
+        axios.get("http://localhost:3000/users")
+        .then((res)=>{
+                const users = res.data;
+                const teacherExists = users.some(user => user.role === 'teacher');
+                console.log(teacherExists)
+                setExistingTeacher(teacherExists);
+        })
+        .catch((err)=>{
+            console.log("error getting data",err)
+        })
+    },[])
 
     const eventHandler = (e) => {
         e.preventDefault();
@@ -99,13 +113,14 @@ const UserIdUpdate = () => {
 
                         <div className="role_input">
                             <label htmlFor="role">Role</label>
-                            <select
-                                value={user.role}
-                                onChange={(e) => setUser({ ...user, role: e.target.value })}
-                            >
-                                <option value="student">Student</option>
-                                <option value="teacher">Teacher</option>
-                            </select>
+                            <select>
+                            <option value={user.role} onChange={(e) => setUser({...user,role:e.target.value})}>Student</option>
+                            {
+                                !existingTeacher ? <option value={user.role} onChange={(e) => setUser({...user,role:e.target.value})}>Teacher</option> : null
+                            }
+                            
+
+                        </select>
                         </div>
 
                         <div className="belt_input">

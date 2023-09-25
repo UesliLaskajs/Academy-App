@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
 
@@ -11,8 +11,26 @@ const UserCreate = () => {
     const [belt, setBelt] = useState(false)
     const [degree, setDegree] = useState(false)
 
+
+    const [existingTeacher,setExistingTeacher]=useState(false)
+
     const [errors, setErrors] = useState([])
     const navigate = useNavigate();
+
+    useEffect(()=>{
+        axios.get("http://localhost:3000/users")
+        .then((res)=>{
+                const users = res.data;
+                const teacherExists = users.some(user => user.role === 'teacher');
+                console.log(teacherExists)
+                setExistingTeacher(teacherExists);
+        })
+        .catch((err)=>{
+            console.log("error getting data",err)
+        })
+    },[])
+
+
 
     const eventHandler = (e) => {
         e.preventDefault();
@@ -46,54 +64,57 @@ const UserCreate = () => {
                 <div className="inputs_container">
                     <form onSubmit={eventHandler}>
                         <div className="name_input">
-                            <label htmlFor="name">Name:</label>
-                            <input type='text'
-                                value={name}
-                                placeholder="Enter Name"
-                                onChange={(e) => setName(e.target.value)} />
-                            {errors.name ?
-                                <p>{errors.name.message}</p> : null}
+                        <label htmlFor="name">Name:</label>
+                        <input type='text'
+                            value={name}
+                            placeholder="Enter Name"
+                            onChange={(e) => setName(e.target.value)} />
+                        {errors.name ?
+                            <p>{errors.name.message}</p> : null}
 
                         </div>
                         <div className="email_input">
-                            <label htmlFor="email">Email</label>
-                            <input type="email"
-                                value={email}
-                                placeholder="Enter Email"
-                                onChange={(e) => setEmail(e.target.value)} />
-                            {errors.email ?
-                                <p>{errors.email.message}</p> : null}
+                        <label htmlFor="email">Email</label>
+                        <input type="email"
+                            value={email}
+                            placeholder="Enter Email"
+                            onChange={(e) => setEmail(e.target.value)} />
+                        {errors.email ?
+                            <p>{errors.email.message}</p> : null}
                         </div>
-
+                        
                         <div className="password_input">
-                            <label htmlFor="password">Password</label>
-                            <input type="password"
-                                value={password}
-                                placeholder="Enter Pass"
-                                onChange={(e) => setPassword(e.target.value)} />
-                            {errors.password ?
-                                <p>{errors.password.message}</p> : null}
+                        <label htmlFor="password">Password</label>
+                        <input type="password"
+                            value={password}
+                            placeholder="Enter Pass"
+                            onChange={(e) => setPassword(e.target.value)} />
+                        {errors.password ?
+                            <p>{errors.password.message}</p> : null}
                         </div>
-
+                        
                         <div className="image_input">
-                            <label htmlFor="image">Image</label>
-                            <input type="text"
-                                value={image}
-                                placeholder="Enter image Url"
-                                onChange={(e) => setImage(e.target.value)} />
-                            {errors.image ?
-                                <p>{errors.image.message}</p> : null}
+                        <label htmlFor="image">Image</label>
+                        <input type="text"
+                            value={image}
+                            placeholder="Enter image Url"
+                            onChange={(e) => setImage(e.target.value)} />
+                        {errors.image ?
+                            <p>{errors.image.message}</p> : null}
                         </div>
-
-                        <div className="role_input">
+                        
+                            <div className="role_input">
                             <label htmlFor="role">Role</label>
-                            <select>
-                                <option value="student" onChange={(e) => setRole(e.target.value)}>Student</option>
-                                <option value="teacher" onChange={(e) => setRole(e.target.value)}>Teacher</option>
+                        <select>
+                            <option value="student" onChange={(e) => setRole(e.target.value)}>Student</option>
+                            {
+                                !existingTeacher ? <option value="teacher" onChange={(e) => setRole(e.target.value)}>Teacher</option> : null
+                            }
+                            
 
-                            </select>
-                        </div>
-
+                        </select>
+                            </div>
+                        
 
                         <div className="belt_input">
                             <label htmlFor="belt">BetaPlan Belt</label>
