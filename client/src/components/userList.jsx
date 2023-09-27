@@ -25,43 +25,36 @@ const UserList = () => {
             })
             .catch((err) => {
                 console.log("Error deleting User", err);
-
             });
     };
-
 
     return (
         <>
             <div className="user_list_container">
                 <Link to={'/users/new'}><h1>Create user</h1></Link>
-                {users.map((item, index) => (
-                    <div key={index} className="user_container">
-                        <div className="img_container">
-                            <img src={item.image} alt="" />
-                        </div>
-                        <div className="name_buttons_container">
-                            <div className="name_user_list">
-                                <h1>{item.name}</h1>
-                                {item.role === 'teacher' ? <div><h1>Teacher</h1></div> : null}
+                {users.sort((a,b)=>(a.name.localeCompare(b.name)))  
+                    .map((item, index) => (
+                        <div key={index} className="user_container">
+                            <div className="img_container">
+                                <img src={item.image} alt="" />
                             </div>
-                            <div className="buttons_user_list">
-                                <div className="button_green">
-                                    <button onClick={() => navigate(`/users/${item._id}`)}>View Profile</button>
+                            <div className="name_buttons_container">
+                                <div className="name_user_list">
+                                    <h1>{item.name}</h1>
+                                    {item.role === 'teacher' ? <div><h1>Teacher</h1></div> : null}
                                 </div>
-                                <div className="button_red">
-                                    <button onClick={() => deleteUser(item._id)}>Delete User</button>
+                                <div className="buttons_user_list">
+                                    <div className="button_green">
+                                        <button onClick={() => navigate(`/users/${item._id}`)}>View Profile</button>
+                                    </div>
+                                    <div className="button_red">
+                                        <button onClick={() => deleteUser(item._id)}>Delete User</button>
+                                    </div>
                                 </div>
-
                             </div>
-
-
-
                         </div>
-
-                    </div>
-                ))}
+                    ))}
             </div>
-
         </>
     );
 };
